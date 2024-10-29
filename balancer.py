@@ -3,7 +3,7 @@ import sys
 from urllib import parse
 
 hostName = "localhost"
-serverPort = 8081
+serverPort = 1111
 ports = [8081,8080]
 
 class MyServer(BaseHTTPRequestHandler):    
@@ -11,29 +11,26 @@ class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
         global skeletonOpened
         print("GET REQUEST balancer.py")
+        
+        if self.getURI() == '/lab5':
+           self.set_headers(200)
+           self.wfile.write(self.getURI().encode())
+           html = open("loadTester.html")
+           htmlString = html.read()
+           html.close()
+           self.wfile.write(bytes(htmlString, "utf-8"))      
+           
         params = self.getParams()
         if 'number' in params:
-            skeletonOpened = 1
             print("number is: " + params['number'])
             self.set_headers(200)
             html = open('skeleton.html')
-            #html = html.read()
-            #html = html.replace("_NUM_", params['number'])
-            #html = html.replace("_PORT_", str(ports[0]))
             htmlString = html.read()
             htmlString = htmlString.replace("_NUM_", params['number'])
             htmlString = htmlString.replace("_PORT_", str(ports[0]))
             html.close()
-            #self.wfile.write(bytes(html, "UTF-8"))
-            #self.wfile.write(bytes(htmlString.replace("_NUM_", str(params['number'])), "utf-8"))
-            #self.wfile.write(bytes(htmlString.replace("_PORT_", str(ports[0])), "UTF-8"))
             self.wfile.write(bytes(htmlString, "UTF-8"))
-            total = 0
-            for x in range(0, int(params['number'])):
-                total += x
-            print('total ' + str(total))
-            ports.append(ports.pop(0))
-            return total
+
             
         # Here, we'll get the input 'number' parameter first from the GET request
         # Then we'll open our skeleton HTML file and read it into a string
@@ -58,6 +55,9 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Headers', "*")
         self.end_headers()
 
+    def getURI(self):
+         return parse.urlsplit(self.path).path
+     
 if __name__ == "__main__":        
     webServer = HTTPServer((hostName, serverPort), MyServer)
     print("Server started http://%s:%s" % (hostName, serverPort))

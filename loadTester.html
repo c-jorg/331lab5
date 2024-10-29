@@ -26,12 +26,13 @@
 				iframe.width = "400";
 				iframe.height = "200";
 				document.getElementById("myNum").value;
-				iframe.src = "http://127.0.0.1:8081?number=" + Math.floor(Math.random() * (parseInt(document.getElementById("myNum").value) + 1));
+				iframe.src = "http://127.0.0.1:1111?number=" + Math.floor(Math.random() * (parseInt(document.getElementById("myNum").value) + 1));
 				frames.push(iframe);
 				document.getElementById("myFrames").appendChild(iframe);
 			}
 		}, 100);
 	});
+	console.log("reached end of loadTester script");
 </script>
 </body>
 </html>
