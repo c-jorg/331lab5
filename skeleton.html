@@ -9,19 +9,25 @@
 </div>
 <script>
 	window.addEventListener( "load", function() {
+		console.log("number variable is " + number);
 		var myNumber = _NUM_;
 		var port = _PORT_;
+		console.log("Number is: " + number + ", port is: " + port);
 		// Here, we'll create an AJAX request to one of our services with
 		// the specified port number, and the number parameter in the query string
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-					  if (this.readyState == 4 && this.staus == 200) {
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function() {
+					  if (this.readyState == 4 && this.status == 200) {
+					  	console.log("xmlhhtp thingy is executing");
 						document.getElementById("content").innerHTML = this.responseText;
-						document.getElementById("contnet").append("This response came from the server on port: " + port);
+						document.getElementById("content").append("This response came from the server on port: " + port);
 					  }
-					};
+					
 
-	
+		};
+		xmlhttp.open("GET", "http://localhost:" + port +"/?number=" + myNumber, true);
+		xmlhttp.send();
+	});
 </script>
 </body>
 </html>

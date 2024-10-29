@@ -9,13 +9,32 @@ ports = [8081,8080]
 class MyServer(BaseHTTPRequestHandler):    
         
     def do_GET(self):
+        global skeletonOpened
         print("GET REQUEST balancer.py")
         params = self.getParams()
         if 'number' in params:
+            skeletonOpened = 1
+            print("number is: " + params['number'])
+            self.set_headers(200)
             html = open('skeleton.html')
-            html = html.replace("_NUM_", params['number'])
-            html = html.replace("_PORT_", ports[0])
+            #html = html.read()
+            #html = html.replace("_NUM_", params['number'])
+            #html = html.replace("_PORT_", str(ports[0]))
+            htmlString = html.read()
+            htmlString = htmlString.replace("_NUM_", params['number'])
+            htmlString = htmlString.replace("_PORT_", str(ports[0]))
+            html.close()
+            #self.wfile.write(bytes(html, "UTF-8"))
+            #self.wfile.write(bytes(htmlString.replace("_NUM_", str(params['number'])), "utf-8"))
+            #self.wfile.write(bytes(htmlString.replace("_PORT_", str(ports[0])), "UTF-8"))
+            self.wfile.write(bytes(htmlString, "UTF-8"))
+            total = 0
+            for x in range(0, int(params['number'])):
+                total += x
+            print('total ' + str(total))
             ports.append(ports.pop(0))
+            return total
+            
         # Here, we'll get the input 'number' parameter first from the GET request
         # Then we'll open our skeleton HTML file and read it into a string
         # We'll replace the _NUM_ value in the HTML with our input number parameter
