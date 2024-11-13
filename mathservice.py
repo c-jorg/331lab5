@@ -1,9 +1,12 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import sys
 from urllib import parse
+import uuid
 
-hostName = "localhost"
+hostName = "0.0.0.0"
 serverPort = 8080
+address = uuid.getnode()
+print("File running")
 
 class MyServer(BaseHTTPRequestHandler):    
         
@@ -20,7 +23,7 @@ class MyServer(BaseHTTPRequestHandler):
                     output += x
                 print(output)
                 self.set_headers(200)
-                self.wfile.write(f"<h2>Trangular number: {output}</h2>".encode("utf-8"))
+                self.wfile.write(f"<h2>Trangular number: {output}, My Address: {address}</h2>".encode("utf-8"))
             except:
                 self.set_headers(400)
                 self.wfile.write("something bad happened".encode("utf-8"))
