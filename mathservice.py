@@ -8,22 +8,25 @@ serverPort = 8080
 class MyServer(BaseHTTPRequestHandler):    
         
     def do_GET(self):
-        print("GET REQUEST mathservice.py")
-        
-        
-        params = self.getParams();
-        if 'number' in params:
-            #self.set_headers(200)
-            print("number is " + params['number'])
-            total = 0
-            for x in range(0, int(params['number'])):
-                total += x
-            print('total ' + str(total))
-            return total
         # Here, we'll fetch a 'number' parameter from the incoming GET request
         # We'll print the incoming request number to the console
         # Then, we'll perform an iterative calculation on it - summing all values less than or equal to the input
         # We'll then return the number
+        params = self.getParams()
+        if 'number' in params:
+            try:
+                output = 0
+                for x in range(int(params['number']) + 1):
+                    output += x
+                print(output)
+                self.set_headers(200)
+                self.wfile.write(f"<h2>Trangular number: {output}</h2>".encode("utf-8"))
+            except:
+                self.set_headers(400)
+                self.wfile.write("something bad happened".encode("utf-8"))
+        else:
+            self.set_headers(400)
+            self.wfile.write("no number".encode("utf-8"))
         
     # Gets the query parameters of a request and returns them as a dictionary
     def getParams(self):
@@ -41,7 +44,6 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', "*")
         self.send_header('Access-Control-Allow-Headers', "*")
         self.end_headers()
-    
 
 if __name__ == "__main__":        
     webServer = HTTPServer((hostName, serverPort), MyServer)

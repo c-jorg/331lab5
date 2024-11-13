@@ -8,27 +8,25 @@
 <div id="content">
 </div>
 <script>
-	
+	console.log("skeleton Script called");
 	window.addEventListener( "load", function() {
-		console.log("skeleton has been opened");
 		var myNumber = _NUM_;
 		var port = _PORT_;
-		console.log("Number is: " + myNumber + ", port is: " + port);
+		var xhttp = new XMLHttpRequest();
 		// Here, we'll create an AJAX request to one of our services with
 		// the specified port number, and the number parameter in the query string
-		var xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function() {
-					  if (this.readyState == 4 && this.status == 200) {
-					  	console.log("xmlhhtp thingy is executing");
-						document.getElementById("content").innerHTML = this.responseText;
-						document.getElementById("content").append("This response came from the server on port: " + port);
-					  }
-					
-
-		};
-		xmlhttp.open("GET", "http://localhost:" + port +"/?number=" + myNumber, true);
-		xmlhttp.send();
+		xhttp.onreadystatechange = function(){
+			if(this.readyState == 4 && this.status == 200){
+				document.getElementById("content").innerHTML = this.responseText;
+				document.getElementById("content").append("This response came from the server on port: " + port);
+			}else{
+				document.getElementById("content").innertext = "Something went wrong";
+			}
+		}
+		xhttp.open("GET", "http://127.0.0.1:" + port + "?number=" + myNumber, true);
+		xhttp.send();
 	});
+
 </script>
 </body>
 </html>
