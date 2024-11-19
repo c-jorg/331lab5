@@ -16,7 +16,12 @@ class MyServer(BaseHTTPRequestHandler):
             html = open("loadTester.html")
             htmlString = html.read()
             html.close()
-            self.wfile.write(bytes(htmlString, "utf-8"))      
+            self.wfile.write(bytes(htmlString, "utf-8"))    
+            
+        if self.getURI() == '/loadTester.html':
+            self.set_headers(200)
+            self.wfile.write(self.getURI().encode())
+            
         
         params = self.getParams();
         if 'number' in params:
