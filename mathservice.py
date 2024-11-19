@@ -11,6 +11,8 @@ print("File running")
 class MyServer(BaseHTTPRequestHandler):    
         
     def do_GET(self):
+        self.set_headers(200)
+        self.wfile.write("the page has loaded".encode("utf-8"))
         # Here, we'll fetch a 'number' parameter from the incoming GET request
         # We'll print the incoming request number to the console
         # Then, we'll perform an iterative calculation on it - summing all values less than or equal to the input
