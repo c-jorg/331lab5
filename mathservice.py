@@ -10,19 +10,7 @@ class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
         print("GET REQUEST mathservice.py")
         
-        if self.getURI() == '/lab5':
-            self.set_headers(200)
-            self.wfile.write(self.getURI().encode())
-            html = open("loadTester.html")
-            htmlString = html.read()
-            html.close()
-            self.wfile.write(bytes(htmlString, "utf-8"))    
-            
-        if self.getURI() == '/loadTester.html':
-            self.set_headers(200)
-            self.wfile.write(self.getURI().encode())
-            
-        
+
         params = self.getParams();
         if 'number' in params:
             #self.set_headers(200)
@@ -53,9 +41,7 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', "*")
         self.send_header('Access-Control-Allow-Headers', "*")
         self.end_headers()
-        
-    def getURI(self):
-         return parse.urlsplit(self.path).path
+    
 
 if __name__ == "__main__":        
     webServer = HTTPServer((hostName, serverPort), MyServer)
